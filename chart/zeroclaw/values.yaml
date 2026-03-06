@@ -493,3 +493,25 @@ extraManifests: []
 #       key: SKILL.md
 # ---------------------------------------------------------------------------
 skillFiles: []
+
+# ---------------------------------------------------------------------------
+# Gateway proxy sidecar (daemon mode only)
+# In daemon mode, ZeroClaw binds to 127.0.0.1. The socat sidecar proxies
+# the K8s Service port to localhost. Disable to prevent external access.
+# ---------------------------------------------------------------------------
+gatewayProxy:
+  enabled: true
+
+# ---------------------------------------------------------------------------
+# Workspace .env file
+# Write selected env var values into the workspace .env file at startup.
+# ZeroClaw loads skill credentials from .env, not from process environment.
+# The actual values are sourced from extraEnv entries (secretKeyRef or plain).
+# Example:
+#   envFile:
+#     enabled: true
+#     keys: ["BRAVE_API_KEY", "APIFY_KEY"]
+# ---------------------------------------------------------------------------
+envFile:
+  enabled: false
+  keys: []

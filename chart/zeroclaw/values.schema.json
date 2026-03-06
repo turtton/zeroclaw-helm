@@ -1765,6 +1765,38 @@
       },
       "default": [],
       "description": "Skill ConfigMaps to mount into workspace/skills/<name>/SKILL.md."
+    },
+    "gatewayProxy": {
+      "type": "object",
+      "description": "Gateway proxy sidecar settings (daemon mode only). The socat sidecar proxies K8s Service traffic to the daemon's localhost-only gateway.",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable the socat gateway-proxy sidecar in daemon mode."
+        }
+      },
+      "additionalProperties": false
+    },
+    "envFile": {
+      "type": "object",
+      "description": "Write selected env var values into the workspace .env file. ZeroClaw loads skill credentials from .env, not from process environment.",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable writing a .env file into the workspace at startup."
+        },
+        "keys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "Env var names to write into .env. Values come from extraEnv entries."
+        }
+      },
+      "additionalProperties": false
     }
   },
   "additionalProperties": false

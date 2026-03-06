@@ -126,6 +126,30 @@ spec:
               mountPath: /skills/{{ .name }}
               readOnly: true
             {{- end }}
+        {{- if and .Values.envFile.enabled .Values.envFile.keys }}
+        - name: init-env
+          image: busybox:1.37
+          command: ["sh", "-c"]
+          args:
+            - |
+              set -e
+              ENV_FILE="/zeroclaw-data/.zeroclaw/workspace/.env"
+              : > "$ENV_FILE"
+              {{- range .Values.envFile.keys }}
+              if [ -n "${{"{"}}{{ . }}+x{{"}"}}" ]; then
+                printf '%s=%s\n' "{{ . }}" "${{ . }}" >> "$ENV_FILE"
+              fi
+              {{- end }}
+              chown 65534:65534 "$ENV_FILE"
+              chmod 600 "$ENV_FILE"
+          env:
+            {{- with .Values.extraEnv }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          volumeMounts:
+            - name: data
+              mountPath: /zeroclaw-data
+        {{- end }}
       containers:
         - name: zeroclaw
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -204,7 +228,7 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /zeroclaw-data
-        {{- if eq .Values.config.mode "daemon" }}
+        {{- if and (eq .Values.config.mode "daemon") .Values.gatewayProxy.enabled }}
         - name: gateway-proxy
           image: alpine/socat:1.8.0.3
           args:
