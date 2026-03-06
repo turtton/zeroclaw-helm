@@ -171,6 +171,22 @@ config:
     requireApprovalForMediumRisk: true
     blockHighRiskCommands: true
     autoApprove: []
+    allowSensitiveFileReads: false
+    allowSensitiveFileWrites: false
+    nonCliExcludedTools: []
+    alwaysAsk: []
+    # Per-command context-aware allow/deny/require-approval rules
+    # Each entry: { command, action (allow|deny|require_approval), domain, path_pattern, high_risk_override }
+    commandContextRules: []
+    # Additional roots allowed outside workspace (after canonicalization)
+    allowedRoots: []
+    # Allowlist for who can run non-CLI approval-management commands
+    nonCliApprovalApprovers: []
+    # Natural-language behavior for approval-management commands: "direct" | "request_confirm" | "disabled"
+    nonCliNaturalLanguageApprovalMode: direct
+    # Per-channel override map for natural-language approval mode
+    # Example: { slack: "request_confirm", discord: "disabled" }
+    nonCliNaturalLanguageApprovalModeByChannel: {}
 
   # ── Runtime ─────────────────────────────────────────────────
   runtime:
@@ -237,6 +253,9 @@ config:
     toolDispatcher: auto
     allowedTools: []
     deniedTools: []
+    loopDetectionNoProgressThreshold: 3
+    loopDetectionPingPongCycles: 2
+    loopDetectionFailureStreak: 3
 
   # ── Reliability ─────────────────────────────────────────────
   reliability:

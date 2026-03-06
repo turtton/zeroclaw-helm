@@ -58,6 +58,39 @@ data:
     require_approval_for_medium_risk = {{ .Values.config.autonomy.requireApprovalForMediumRisk }}
     block_high_risk_commands = {{ .Values.config.autonomy.blockHighRiskCommands }}
     auto_approve = {{ include "zeroclaw.tomlStringList" .Values.config.autonomy.autoApprove }}
+    allow_sensitive_file_reads = {{ .Values.config.autonomy.allowSensitiveFileReads }}
+    allow_sensitive_file_writes = {{ .Values.config.autonomy.allowSensitiveFileWrites }}
+    non_cli_excluded_tools = {{ include "zeroclaw.tomlStringList" .Values.config.autonomy.nonCliExcludedTools }}
+    always_ask = {{ include "zeroclaw.tomlStringList" .Values.config.autonomy.alwaysAsk }}
+    {{- if .Values.config.autonomy.allowedRoots }}
+    allowed_roots = {{ include "zeroclaw.tomlStringList" .Values.config.autonomy.allowedRoots }}
+    {{- else }}
+    allowed_roots = []
+    {{- end }}
+    non_cli_approval_approvers = {{ include "zeroclaw.tomlStringList" .Values.config.autonomy.nonCliApprovalApprovers }}
+    non_cli_natural_language_approval_mode = {{ .Values.config.autonomy.nonCliNaturalLanguageApprovalMode | quote }}
+    {{- if .Values.config.autonomy.nonCliNaturalLanguageApprovalModeByChannel }}
+
+    [autonomy.non_cli_natural_language_approval_mode_by_channel]
+    {{- range $channel, $mode := .Values.config.autonomy.nonCliNaturalLanguageApprovalModeByChannel }}
+    {{ $channel }} = {{ $mode | quote }}
+    {{- end }}
+    {{- end }}
+    {{- range .Values.config.autonomy.commandContextRules }}
+
+    [[autonomy.command_context_rules]]
+    command = {{ .command | quote }}
+    action = {{ .action | quote }}
+    {{- if .domain }}
+    domain = {{ .domain | quote }}
+    {{- end }}
+    {{- if .pathPattern }}
+    path_pattern = {{ .pathPattern | quote }}
+    {{- end }}
+    {{- if .highRiskOverride }}
+    high_risk_override = {{ .highRiskOverride }}
+    {{- end }}
+    {{- end }}
 
     # ── Runtime ───────────────────────────────────────────────
     [runtime]
@@ -138,6 +171,9 @@ data:
     tool_dispatcher = {{ .Values.config.agent.toolDispatcher | quote }}
     allowed_tools = {{ include "zeroclaw.tomlStringList" .Values.config.agent.allowedTools }}
     denied_tools = {{ include "zeroclaw.tomlStringList" .Values.config.agent.deniedTools }}
+    loop_detection_no_progress_threshold = {{ .Values.config.agent.loopDetectionNoProgressThreshold }}
+    loop_detection_ping_pong_cycles = {{ .Values.config.agent.loopDetectionPingPongCycles }}
+    loop_detection_failure_streak = {{ .Values.config.agent.loopDetectionFailureStreak }}
 
     # ── Reliability ───────────────────────────────────────────
     [reliability]

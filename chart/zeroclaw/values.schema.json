@@ -681,6 +681,68 @@
               "items": { "type": "string" },
               "default": [],
               "description": "Tools auto-approved without confirmation prompts."
+            },
+            "allowSensitiveFileReads": {
+              "type": "boolean",
+              "default": false,
+              "description": "Allow reading files marked as sensitive (e.g. .env, credentials)."
+            },
+            "allowSensitiveFileWrites": {
+              "type": "boolean",
+              "default": false,
+              "description": "Allow writing to files marked as sensitive."
+            },
+            "nonCliExcludedTools": {
+              "type": "array",
+              "items": { "type": "string" },
+              "default": [],
+              "description": "Tools excluded from non-CLI (chat) sessions."
+            },
+            "alwaysAsk": {
+              "type": "array",
+              "items": { "type": "string" },
+              "default": [],
+              "description": "Tools that always require explicit user confirmation."
+            },
+            "commandContextRules": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "command": { "type": "string", "description": "Command name or pattern." },
+                  "action": { "type": "string", "enum": ["allow", "deny", "require_approval"], "description": "Action to take." },
+                  "domain": { "type": "string", "description": "Optional domain constraint." },
+                  "pathPattern": { "type": "string", "description": "Optional path pattern constraint." },
+                  "highRiskOverride": { "type": "boolean", "description": "Override high-risk classification." }
+                },
+                "required": ["command", "action"]
+              },
+              "default": [],
+              "description": "Per-command context-aware allow/deny/require-approval rules."
+            },
+            "allowedRoots": {
+              "type": "array",
+              "items": { "type": "string" },
+              "default": [],
+              "description": "Additional roots allowed outside workspace after canonicalization."
+            },
+            "nonCliApprovalApprovers": {
+              "type": "array",
+              "items": { "type": "string" },
+              "default": [],
+              "description": "Allowlist for who can run non-CLI approval-management commands."
+            },
+            "nonCliNaturalLanguageApprovalMode": {
+              "type": "string",
+              "enum": ["direct", "request_confirm", "disabled"],
+              "default": "direct",
+              "description": "Natural-language behavior for approval-management commands."
+            },
+            "nonCliNaturalLanguageApprovalModeByChannel": {
+              "type": "object",
+              "additionalProperties": { "type": "string", "enum": ["direct", "request_confirm", "disabled"] },
+              "default": {},
+              "description": "Per-channel override map for natural-language approval mode."
             }
           },
           "additionalProperties": false
@@ -938,6 +1000,24 @@
               "items": { "type": "string" },
               "default": [],
               "description": "Denylist tools for the main agent. Applied after allowed_tools."
+            },
+            "loopDetectionNoProgressThreshold": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 3,
+              "description": "Number of iterations without progress before loop detection triggers."
+            },
+            "loopDetectionPingPongCycles": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 2,
+              "description": "Number of ping-pong cycles (A→B→A) before loop detection triggers."
+            },
+            "loopDetectionFailureStreak": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 3,
+              "description": "Number of consecutive tool failures before loop detection triggers."
             }
           },
           "additionalProperties": false
