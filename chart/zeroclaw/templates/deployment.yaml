@@ -152,7 +152,7 @@ spec:
         {{- end }}
       containers:
         - name: zeroclaw
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command:
             - zeroclaw
