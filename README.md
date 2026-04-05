@@ -1,14 +1,26 @@
 # zeroclaw-helm
 
-[![Lint and Test Charts](https://github.com/the-saas-shop/zeroclaw-helm/actions/workflows/ci.yaml/badge.svg)](https://github.com/the-saas-shop/zeroclaw-helm/actions/workflows/ci.yaml)
-[![Release Charts](https://github.com/the-saas-shop/zeroclaw-helm/actions/workflows/release.yaml/badge.svg)](https://github.com/the-saas-shop/zeroclaw-helm/actions/workflows/release.yaml)
+[![Lint and Test Charts](https://github.com/turtton/zeroclaw-helm/actions/workflows/ci.yaml/badge.svg)](https://github.com/turtton/zeroclaw-helm/actions/workflows/ci.yaml)
+[![Release Charts](https://github.com/turtton/zeroclaw-helm/actions/workflows/release.yaml/badge.svg)](https://github.com/turtton/zeroclaw-helm/actions/workflows/release.yaml)
 
-Helm chart for deploying [ZeroClaw](https://github.com/zeroclaw-labs/zeroclaw) on Kubernetes.
+Fork of [the-saas-shop/zeroclaw-helm](https://github.com/the-saas-shop/zeroclaw-helm) with additional configuration fields for [ZeroClaw](https://github.com/zeroclaw-labs/zeroclaw) on Kubernetes.
+
+## Fork Changes
+
+This fork adds the following fields to `values.yaml` that are not yet available in the upstream chart:
+
+| Value | Type | Description |
+| --- | --- | --- |
+| `config.agent.thinking` | string enum | Thinking level: `off`, `minimal`, `low`, `medium`, `high`, `max` |
+| `config.autonomy.shellEnvPassthrough` | string array | Environment variables forwarded to shell commands |
+| `config.provider` | string enum | Added `github-copilot` to supported providers |
+
+These fields map to the corresponding ZeroClaw config.toml settings (`[agent] thinking`, `[autonomy] shell_env_passthrough`, root `default_provider`).
 
 ## Installation
 
 ```bash
-helm repo add zeroclaw https://the-saas-shop.github.io/zeroclaw-helm
+helm repo add zeroclaw https://turtton.github.io/zeroclaw-helm
 helm repo update
 helm install zeroclaw zeroclaw/zeroclaw --set secret.apiKey="sk-..."
 ```
@@ -40,13 +52,15 @@ helm install zeroclaw ./chart/zeroclaw --set secret.apiKey="sk-..."
 
 All configuration is done through Helm values. Key settings:
 
-| Value              | Default      | Description                                            |
-| ------------------ | ------------ | ------------------------------------------------------ |
-| `config.mode`      | `gateway`    | `gateway` (webhook only) or `daemon`                   |
-| `config.provider`  | `openrouter` | LLM provider                                           |
-| `config.model`     | `""`         | Model override (default: `claude-sonnet-4-5-20250929`) |
-| `secret.apiKey`    | `""`         | API key (creates a Kubernetes Secret)                  |
-| `persistence.size` | `10Gi`       | PVC size for `/zeroclaw-data`                          |
+| Value | Default | Description |
+| --- | --- | --- |
+| `config.mode` | `gateway` | `gateway` (webhook only) or `daemon` |
+| `config.provider` | `openrouter` | LLM provider (includes `github-copilot` in this fork) |
+| `config.model` | `""` | Model override (default: `claude-sonnet-4-5-20250929`) |
+| `config.agent.thinking` | `""` | Thinking level (`off`/`minimal`/`low`/`medium`/`high`/`max`) |
+| `config.autonomy.shellEnvPassthrough` | `[]` | Env vars passed through to shell commands |
+| `secret.apiKey` | `""` | API key (creates a Kubernetes Secret) |
+| `persistence.size` | `10Gi` | PVC size for `/zeroclaw-data` |
 
 See the full values reference and examples in [`chart/zeroclaw/README.md`](chart/zeroclaw/README.md).
 
@@ -67,6 +81,15 @@ helm upgrade zeroclaw ./chart/zeroclaw -f my-values.yaml
 
 # Uninstall
 helm uninstall zeroclaw
+```
+
+### Syncing with upstream
+
+```bash
+git remote add upstream https://github.com/the-saas-shop/zeroclaw-helm.git
+git fetch upstream
+git merge upstream/main
+# Resolve conflicts if any, then push
 ```
 
 ## CI/CD
