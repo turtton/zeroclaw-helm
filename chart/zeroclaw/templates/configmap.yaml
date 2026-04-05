@@ -62,6 +62,9 @@ data:
     allow_sensitive_file_writes = {{ .Values.config.autonomy.allowSensitiveFileWrites }}
     non_cli_excluded_tools = {{ include "zeroclaw.tomlStringList" .Values.config.autonomy.nonCliExcludedTools }}
     always_ask = {{ include "zeroclaw.tomlStringList" .Values.config.autonomy.alwaysAsk }}
+    {{- if .Values.config.autonomy.shellEnvPassthrough }}
+    shell_env_passthrough = {{ include "zeroclaw.tomlStringList" .Values.config.autonomy.shellEnvPassthrough }}
+    {{- end }}
     {{- if .Values.config.autonomy.allowedRoots }}
     allowed_roots = {{ include "zeroclaw.tomlStringList" .Values.config.autonomy.allowedRoots }}
     {{- else }}
@@ -164,6 +167,9 @@ data:
 
     # ── Agent ─────────────────────────────────────────────────
     [agent]
+    {{- if .Values.config.agent.thinking }}
+    thinking = {{ .Values.config.agent.thinking | quote }}
+    {{- end }}
     compact_context = {{ .Values.config.agent.compactContext }}
     max_tool_iterations = {{ .Values.config.agent.maxToolIterations }}
     max_history_messages = {{ .Values.config.agent.maxHistoryMessages }}

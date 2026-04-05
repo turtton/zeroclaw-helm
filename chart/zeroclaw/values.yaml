@@ -175,6 +175,7 @@ config:
     allowSensitiveFileWrites: false
     nonCliExcludedTools: []
     alwaysAsk: []
+    shellEnvPassthrough: []
     # Per-command context-aware allow/deny/require-approval rules
     # Each entry: { command, action (allow|deny|require_approval), domain, path_pattern, high_risk_override }
     commandContextRules: []
@@ -246,6 +247,8 @@ config:
 
   # ── Agent ───────────────────────────────────────────────────
   agent:
+    # Thinking level: "" (default/off) | "off" | "minimal" | "low" | "medium" | "high" | "max"
+    thinking: ""
     compactContext: false
     maxToolIterations: 10
     maxHistoryMessages: 50

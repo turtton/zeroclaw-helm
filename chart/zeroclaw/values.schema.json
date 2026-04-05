@@ -443,7 +443,8 @@
                 "cohere",
                 "bedrock",
                 "venice",
-                "custom"
+                "custom",
+                "github-copilot"
               ]
             },
             {
@@ -704,6 +705,12 @@
               "default": [],
               "description": "Tools that always require explicit user confirmation."
             },
+            "shellEnvPassthrough": {
+              "type": "array",
+              "items": { "type": "string" },
+              "default": [],
+              "description": "Environment variables passed through to shell tool execution. ZeroClaw clears the environment before running shell commands; only these variables (plus safe defaults like PATH, HOME) are forwarded."
+            },
             "commandContextRules": {
               "type": "array",
               "items": {
@@ -962,6 +969,12 @@
           "type": "object",
           "description": "Agent behavior settings.",
           "properties": {
+            "thinking": {
+              "type": "string",
+              "enum": ["", "off", "minimal", "low", "medium", "high", "max"],
+              "default": "",
+              "description": "Thinking level for the agent. Empty string means provider default."
+            },
             "compactContext": {
               "type": "boolean",
               "default": false,
