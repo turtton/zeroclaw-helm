@@ -465,7 +465,7 @@
           "minimum": 0.0,
           "maximum": 1.0,
           "default": 0.7,
-          "description": "LLM temperature (0.0 – 1.0)."
+          "description": "LLM temperature (0.0 \u2013 1.0)."
         },
         "allowPublicBind": {
           "type": "boolean",
@@ -679,7 +679,9 @@
             },
             "autoApprove": {
               "type": "array",
-              "items": { "type": "string" },
+              "items": {
+                "type": "string"
+              },
               "default": [],
               "description": "Tools auto-approved without confirmation prompts."
             },
@@ -695,19 +697,25 @@
             },
             "nonCliExcludedTools": {
               "type": "array",
-              "items": { "type": "string" },
+              "items": {
+                "type": "string"
+              },
               "default": [],
               "description": "Tools excluded from non-CLI (chat) sessions."
             },
             "alwaysAsk": {
               "type": "array",
-              "items": { "type": "string" },
+              "items": {
+                "type": "string"
+              },
               "default": [],
               "description": "Tools that always require explicit user confirmation."
             },
             "shellEnvPassthrough": {
               "type": "array",
-              "items": { "type": "string" },
+              "items": {
+                "type": "string"
+              },
               "default": [],
               "description": "Environment variables passed through to shell tool execution. ZeroClaw clears the environment before running shell commands; only these variables (plus safe defaults like PATH, HOME) are forwarded."
             },
@@ -716,38 +724,76 @@
               "items": {
                 "type": "object",
                 "properties": {
-                  "command": { "type": "string", "description": "Command name or pattern." },
-                  "action": { "type": "string", "enum": ["allow", "deny", "require_approval"], "description": "Action to take." },
-                  "domain": { "type": "string", "description": "Optional domain constraint." },
-                  "pathPattern": { "type": "string", "description": "Optional path pattern constraint." },
-                  "highRiskOverride": { "type": "boolean", "description": "Override high-risk classification." }
+                  "command": {
+                    "type": "string",
+                    "description": "Command name or pattern."
+                  },
+                  "action": {
+                    "type": "string",
+                    "enum": [
+                      "allow",
+                      "deny",
+                      "require_approval"
+                    ],
+                    "description": "Action to take."
+                  },
+                  "domain": {
+                    "type": "string",
+                    "description": "Optional domain constraint."
+                  },
+                  "pathPattern": {
+                    "type": "string",
+                    "description": "Optional path pattern constraint."
+                  },
+                  "highRiskOverride": {
+                    "type": "boolean",
+                    "description": "Override high-risk classification."
+                  }
                 },
-                "required": ["command", "action"]
+                "required": [
+                  "command",
+                  "action"
+                ]
               },
               "default": [],
               "description": "Per-command context-aware allow/deny/require-approval rules."
             },
             "allowedRoots": {
               "type": "array",
-              "items": { "type": "string" },
+              "items": {
+                "type": "string"
+              },
               "default": [],
               "description": "Additional roots allowed outside workspace after canonicalization."
             },
             "nonCliApprovalApprovers": {
               "type": "array",
-              "items": { "type": "string" },
+              "items": {
+                "type": "string"
+              },
               "default": [],
               "description": "Allowlist for who can run non-CLI approval-management commands."
             },
             "nonCliNaturalLanguageApprovalMode": {
               "type": "string",
-              "enum": ["direct", "request_confirm", "disabled"],
+              "enum": [
+                "direct",
+                "request_confirm",
+                "disabled"
+              ],
               "default": "direct",
               "description": "Natural-language behavior for approval-management commands."
             },
             "nonCliNaturalLanguageApprovalModeByChannel": {
               "type": "object",
-              "additionalProperties": { "type": "string", "enum": ["direct", "request_confirm", "disabled"] },
+              "additionalProperties": {
+                "type": "string",
+                "enum": [
+                  "direct",
+                  "request_confirm",
+                  "disabled"
+                ]
+              },
               "default": {},
               "description": "Per-channel override map for natural-language approval mode."
             }
@@ -970,10 +1016,25 @@
           "description": "Agent behavior settings.",
           "properties": {
             "thinking": {
-              "type": "string",
-              "enum": ["", "off", "minimal", "low", "medium", "high", "max"],
-              "default": "",
-              "description": "Thinking level for the agent. Empty string means provider default."
+              "type": "object",
+              "description": "Thinking level configuration.",
+              "properties": {
+                "defaultLevel": {
+                  "type": "string",
+                  "enum": [
+                    "",
+                    "off",
+                    "minimal",
+                    "low",
+                    "medium",
+                    "high",
+                    "max"
+                  ],
+                  "default": "",
+                  "description": "Default thinking level. Empty string means provider default."
+                }
+              },
+              "additionalProperties": false
             },
             "compactContext": {
               "type": "boolean",
@@ -1004,13 +1065,17 @@
             },
             "allowedTools": {
               "type": "array",
-              "items": { "type": "string" },
+              "items": {
+                "type": "string"
+              },
               "default": [],
               "description": "Allowlist tools for the main agent. When non-empty, only listed tools are included."
             },
             "deniedTools": {
               "type": "array",
-              "items": { "type": "string" },
+              "items": {
+                "type": "string"
+              },
               "default": [],
               "description": "Denylist tools for the main agent. Applied after allowed_tools."
             },
@@ -1024,7 +1089,7 @@
               "type": "integer",
               "minimum": 1,
               "default": 2,
-              "description": "Number of ping-pong cycles (A→B→A) before loop detection triggers."
+              "description": "Number of ping-pong cycles (A\u2192B\u2192A) before loop detection triggers."
             },
             "loopDetectionFailureStreak": {
               "type": "integer",
@@ -1416,7 +1481,9 @@
           "type": "object",
           "description": "Workspace seed files (e.g. SOUL.md, IDENTITY.md). Keys are file names, values are content strings.",
           "default": {},
-          "additionalProperties": { "type": "string" }
+          "additionalProperties": {
+            "type": "string"
+          }
         }
       },
       "additionalProperties": false
@@ -1774,7 +1841,11 @@
             "description": "Key inside the ConfigMap that holds the SKILL.md content."
           }
         },
-        "required": ["name", "configMapName", "key"]
+        "required": [
+          "name",
+          "configMapName",
+          "key"
+        ]
       },
       "default": [],
       "description": "Skill ConfigMaps to mount into workspace/skills/<name>/SKILL.md."

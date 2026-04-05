@@ -167,8 +167,9 @@ data:
 
     # ── Agent ─────────────────────────────────────────────────
     [agent]
-    {{- if .Values.config.agent.thinking }}
-    thinking = {{ .Values.config.agent.thinking | quote }}
+    {{- if .Values.config.agent.thinking.defaultLevel }}
+    [agent.thinking]
+    default_level = {{ .Values.config.agent.thinking.defaultLevel | quote }}
     {{- end }}
     compact_context = {{ .Values.config.agent.compactContext }}
     max_tool_iterations = {{ .Values.config.agent.maxToolIterations }}
